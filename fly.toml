@@ -1,0 +1,38 @@
+app = "n8n-xozcmq" # Cambia esto por el nombre de tu aplicación en Fly.io
+
+[build]
+  image = "n8nio/n8n" # Imagen oficial de n8n
+
+[env]
+  DB_TYPE = "postgresdb"
+  DB_POSTGRESDB_HOST = "dpg-cthirdbv2p9s73ds0k6g-a" # Host de tu base de datos
+  DB_POSTGRESDB_PORT = "5432"
+  DB_POSTGRESDB_DATABASE = "n8n_u58g" # Nombre de tu base de datos
+  DB_POSTGRESDB_USER = "n8n_u58g_user" # Usuario de la base de datos
+  DB_POSTGRESDB_PASSWORD = "GCqpPEE7AoPjErjIyT0bQFoPHmg5qRX" # Contraseña de la base de datos
+  GENERIC_TIMEZONE = "UTC" # Cambia si usas otra zona horaria
+  NODE_VERSION = "18.17.0" # Versión de Node.js para n8n
+
+[experimental]
+  allowed_public_ports = [] # Bloquear acceso público directo
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 5678 # Puerto interno para n8n
+  processes = ["app"]
+
+  [services.concurrency]
+    type = "requests"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80 # Puerto público para acceder a n8n
+
+  [[services.tcp_checks]]
+    grace_period = "5s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
